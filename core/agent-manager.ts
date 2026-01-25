@@ -20,12 +20,33 @@ import { getContextAnalyzer, ContextAnalyzer } from './context-analyzer';
 const AGENT_INVOCATION_REGEX = /^@(\w+(?:\+\w+)*)\s+(.+)$/s;
 const MULTI_AGENT_SEPARATOR = '+';
 
+// Interface pour le registre d'agents JSON
+interface AgentRegistryEntry {
+  id: string;
+  name: string;
+  category: AgentCategory;
+  description: string;
+  expertise: string[];
+  skills: string[];
+  triggers: string[];
+  icon?: string;
+  systemPrompt: string;
+}
+
+interface AgentRegistry {
+  version: string;
+  lastUpdated: string;
+  categories: AgentCategory[];
+  agents: AgentRegistryEntry[];
+}
+
 export class AgentManager {
   private agents: Map<string, AgentDefinition> = new Map();
   private apiHandler: APIHandler;
   private configManager: ConfigManager;
   private contextAnalyzer: ContextAnalyzer;
   private agentsDirectory: string;
+  private registryPath: string;
 
   constructor(
     agentsDir?: string,
@@ -34,6 +55,7 @@ export class AgentManager {
     contextAnalyzer?: ContextAnalyzer
   ) {
     this.agentsDirectory = agentsDir || path.join(__dirname, '..', 'agents');
+    this.registryPath = path.join(this.agentsDirectory, 'agents-registry.json');
     this.apiHandler = apiHandler || getAPIHandler();
     this.configManager = configManager || getConfigManager();
     this.contextAnalyzer = contextAnalyzer || getContextAnalyzer();
@@ -41,9 +63,76 @@ export class AgentManager {
   }
 
   /**
-   * Charge tous les agents depuis le répertoire agents/
+   * Charge tous les agents - priorité au registre JSON, fallback sur fichiers individuels
    */
   private loadAgents(): void {
+    // Essayer de charger depuis le registre JSON d'abord
+    if (this.loadFromRegistry()) {
+      console.log(`✅ ${this.agents.size} agents chargés depuis le registre`);
+      return;
+    }
+
+    // Fallback: charger depuis les fichiers individuels
+    console.log('📁 Chargement depuis les fichiers individuels...');
+    this.loadFromIndividualFiles();
+  }
+
+  /**
+   * Charge les agents depuis le fichier agents-registry.json
+   */
+  private loadFromRegistry(): boolean {
+    try {
+      if (!fs.existsSync(this.registryPath)) {
+        console.log('⚠️ Registre agents-registry.json non trouvé');
+        return false;
+      }
+
+      const registryContent = fs.readFileSync(this.registryPath, 'utf-8');
+      const registry: AgentRegistry = JSON.parse(registryContent);
+
+      if (!registry.agents || !Array.isArray(registry.agents)) {
+        console.error('❌ Format de registre invalide: agents manquants');
+        return false;
+      }
+
+      for (const entry of registry.agents) {
+        const agent = this.convertRegistryEntryToAgent(entry);
+        if (agent) {
+          this.registerAgent(agent);
+        }
+      }
+
+      return this.agents.size > 0;
+    } catch (err) {
+      console.error('❌ Erreur lors du chargement du registre:', err);
+      return false;
+    }
+  }
+
+  /**
+   * Convertit une entrée du registre en AgentDefinition
+   */
+  private convertRegistryEntryToAgent(entry: AgentRegistryEntry): AgentDefinition | null {
+    if (!entry.name || !entry.systemPrompt) {
+      console.warn(`⚠️ Agent invalide dans le registre: ${entry.id || 'unknown'}`);
+      return null;
+    }
+
+    return {
+      name: entry.name,
+      category: entry.category,
+      expertise: entry.expertise || [],
+      competencies: entry.skills || [],
+      systemPrompt: entry.systemPrompt,
+      triggers: entry.triggers || [entry.name],
+      icon: entry.icon,
+    };
+  }
+
+  /**
+   * Charge les agents depuis les fichiers individuels (fallback)
+   */
+  private loadFromIndividualFiles(): void {
     const categories: AgentCategory[] = [
       'backend', 'frontend', 'mobile', 'database', 'devops',
       'testing', 'ui-ux', 'api', 'security', 'misc'
@@ -78,6 +167,15 @@ export class AgentManager {
         console.error(`Erreur lors de la lecture du dossier ${categoryPath}:`, err);
       }
     }
+  }
+
+  /**
+   * Recharge les agents depuis le registre
+   */
+  reloadAgents(): boolean {
+    this.agents.clear();
+    this.loadAgents();
+    return this.agents.size > 0;
   }
 
   /**
@@ -331,6 +429,32 @@ export class AgentManager {
       enabled,
     };
   }
+
+  /**
+   * Obtient le registre brut pour inspection
+   */
+  getRegistry(): AgentRegistry | null {
+    try {
+      if (!fs.existsSync(this.registryPath)) {
+        return null;
+      }
+      const content = fs.readFileSync(this.registryPath, 'utf-8');
+      return JSON.parse(content);
+    } catch {
+      return null;
+    }
+  }
+
+  /**
+   * Obtient les catégories disponibles
+   */
+  getCategories(): AgentCategory[] {
+    const categories = new Set<AgentCategory>();
+    for (const agent of this.listAgents()) {
+      categories.add(agent.category);
+    }
+    return Array.from(categories);
+  }
 }
 
 // Instance singleton
@@ -341,6 +465,10 @@ export function getAgentManager(agentsDir?: string): AgentManager {
     agentManagerInstance = new AgentManager(agentsDir);
   }
   return agentManagerInstance;
+}
+
+export function resetAgentManager(): void {
+  agentManagerInstance = null;
 }
 
 export default AgentManager;

@@ -1,9 +1,11 @@
 {
-  "name": "agentium",
+  "name": "skill-ia-agents",
   "version": "1.0.0",
-  "description": "Extension universelle pour IDEs avec 50 agents IA spécialisés",
+  "description": "Extension universelle pour IDEs avec 50 agents IA spécialisés - Grok, OpenAI, Anthropic",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "bin": {
+    "skill-ia-agents": "./install/setup.js",
     "agentium": "./dist/cli/index.js"
   },
   "scripts": {
@@ -11,11 +13,39 @@
     "start": "ts-node cli/index.ts",
     "test": "jest",
     "test:coverage": "jest --coverage",
-    "dev": "ts-node cli/index.ts"
+    "dev": "ts-node cli/index.ts",
+    "setup": "node install/setup.js",
+    "postinstall": "node install/setup.js --skip-prompts || true"
   },
-  "keywords": ["ai", "agents", "ide", "extension", "grok", "openai"],
-  "author": "",
+  "keywords": [
+    "ai",
+    "agents",
+    "ide",
+    "extension",
+    "grok",
+    "openai",
+    "anthropic",
+    "claude",
+    "vscode",
+    "cursor",
+    "copilot",
+    "code-assistant",
+    "react",
+    "python",
+    "nodejs",
+    "docker",
+    "kubernetes"
+  ],
+  "author": "Agentium Team",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/agentium/agentium.git"
+  },
+  "homepage": "https://github.com/agentium/agentium#readme",
+  "bugs": {
+    "url": "https://github.com/agentium/agentium/issues"
+  },
   "dependencies": {
     "axios": "^1.6.0",
     "better-sqlite3": "^9.0.0",
@@ -33,5 +63,12 @@
   },
   "engines": {
     "node": ">=18.0.0"
-  }
+  },
+  "files": [
+    "dist",
+    "agents",
+    "install",
+    "vscode-extension",
+    "README.md"
+  ]
 }
