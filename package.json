@@ -1,0 +1,37 @@
+{
+  "name": "agentium",
+  "version": "1.0.0",
+  "description": "Extension universelle pour IDEs avec 50 agents IA spécialisés",
+  "main": "dist/index.js",
+  "bin": {
+    "agentium": "./dist/cli/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "ts-node cli/index.ts",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "dev": "ts-node cli/index.ts"
+  },
+  "keywords": ["ai", "agents", "ide", "extension", "grok", "openai"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.0",
+    "better-sqlite3": "^9.0.0",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.8",
+    "@types/jest": "^29.5.0",
+    "@types/node": "^20.0.0",
+    "@types/uuid": "^9.0.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.0",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
