@@ -1,0 +1,219 @@
+{
+  "name": "agentium-vscode",
+  "displayName": "Agentium - 50 AI Agents for Developers",
+  "description": "Extension VS Code avec 50 agents IA spécialisés pour le développement. Utilisez @react, @python, @docker et plus encore directement dans votre IDE.",
+  "version": "1.0.0",
+  "publisher": "agentium",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets",
+    "Machine Learning",
+    "Other"
+  ],
+  "keywords": [
+    "ai",
+    "agents",
+    "grok",
+    "openai",
+    "copilot",
+    "assistant",
+    "code generation",
+    "react",
+    "python",
+    "docker"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "agentium.invokeAgent",
+        "title": "Agentium: Invoke Agent",
+        "icon": "$(rocket)"
+      },
+      {
+        "command": "agentium.listAgents",
+        "title": "Agentium: List All Agents",
+        "icon": "$(list-unordered)"
+      },
+      {
+        "command": "agentium.openChat",
+        "title": "Agentium: Open Chat Panel",
+        "icon": "$(comment-discussion)"
+      },
+      {
+        "command": "agentium.analyzeCode",
+        "title": "Agentium: Analyze Selected Code",
+        "icon": "$(search)"
+      },
+      {
+        "command": "agentium.suggestAgent",
+        "title": "Agentium: Suggest Agent for Current File",
+        "icon": "$(lightbulb)"
+      },
+      {
+        "command": "agentium.configure",
+        "title": "Agentium: Configure Settings",
+        "icon": "$(gear)"
+      },
+      {
+        "command": "agentium.insertCode",
+        "title": "Agentium: Insert Code at Cursor",
+        "icon": "$(insert)"
+      },
+      {
+        "command": "agentium.explainCode",
+        "title": "Agentium: Explain Selected Code",
+        "icon": "$(info)"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "agentium",
+          "title": "Agentium",
+          "icon": "$(hubot)"
+        }
+      ]
+    },
+    "views": {
+      "agentium": [
+        {
+          "type": "webview",
+          "id": "agentium.chatPanel",
+          "name": "Chat"
+        },
+        {
+          "id": "agentium.agentsList",
+          "name": "Agents"
+        },
+        {
+          "id": "agentium.history",
+          "name": "History"
+        }
+      ]
+    },
+    "menus": {
+      "editor/context": [
+        {
+          "command": "agentium.analyzeCode",
+          "when": "editorHasSelection",
+          "group": "agentium@1"
+        },
+        {
+          "command": "agentium.explainCode",
+          "when": "editorHasSelection",
+          "group": "agentium@2"
+        },
+        {
+          "command": "agentium.suggestAgent",
+          "group": "agentium@3"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "agentium.configure",
+          "when": "view == agentium.chatPanel",
+          "group": "navigation"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "agentium.openChat",
+        "key": "ctrl+shift+a",
+        "mac": "cmd+shift+a"
+      },
+      {
+        "command": "agentium.invokeAgent",
+        "key": "ctrl+shift+i",
+        "mac": "cmd+shift+i"
+      },
+      {
+        "command": "agentium.analyzeCode",
+        "key": "ctrl+shift+e",
+        "mac": "cmd+shift+e",
+        "when": "editorHasSelection"
+      }
+    ],
+    "configuration": {
+      "title": "Agentium",
+      "properties": {
+        "agentium.apiProvider": {
+          "type": "string",
+          "default": "grok",
+          "enum": ["grok", "openai", "anthropic", "ollama"],
+          "description": "Primary API provider for AI agents"
+        },
+        "agentium.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "API key for the selected provider"
+        },
+        "agentium.model": {
+          "type": "string",
+          "default": "grok-2-latest",
+          "description": "Model to use for AI responses"
+        },
+        "agentium.autoSuggest": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically suggest agents based on file context"
+        },
+        "agentium.inlineCompletion": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable inline code completion suggestions"
+        },
+        "agentium.theme": {
+          "type": "string",
+          "default": "auto",
+          "enum": ["auto", "light", "dark"],
+          "description": "Chat panel theme"
+        },
+        "agentium.maxTokens": {
+          "type": "number",
+          "default": 4000,
+          "description": "Maximum tokens per request"
+        },
+        "agentium.timeout": {
+          "type": "number",
+          "default": 30000,
+          "description": "Request timeout in milliseconds"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile",
+    "test": "node ./out/test/runTest.js",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "@vscode/vsce": "^2.22.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/agentium/agentium-vscode.git"
+  },
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#1e1e1e",
+    "theme": "dark"
+  }
+}
