@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Coverage
+coverage/
+
+# Config (contient des clés API)
+# Note: Le fichier de config utilisateur est dans ~/.skill-ia-agents/
+
+# Test databases
+*.test.db
+
+# Environment
+.env
+.env.local
+.env.*.local
