@@ -1,0 +1,3 @@
+## 2026-06-02 - Webview Focus States Missing
+**Learning:** Custom VS Code Webviews often use CSS resets or structural styles that strip default browser focus outlines. Interactive elements (buttons, selects) easily lose accessibility for keyboard users unless explicit outline styles are defined.
+**Action:** Consistently apply explicitly styled `:focus-visible` pseudo-classes to all interactive elements within Webview UIs to ensure keyboard navigation visibility.
