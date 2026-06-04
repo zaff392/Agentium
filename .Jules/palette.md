@@ -1,0 +1,3 @@
+## 2024-06-04 - WebView Form Controls Accessibility
+**Learning:** In VS Code WebView panels using standard HTML, input elements (select, textarea, buttons) often lack visual focus indicators and ARIA labels. Adding `focus-visible` outline styles and explicit `aria-label` attributes significantly improves keyboard navigation and screen reader support without breaking existing layouts. Using `aria-live="polite"` on chat message containers ensures screen readers announce new incoming messages automatically.
+**Action:** Always include `.focus-visible` or equivalent styles for all interactive elements in WebViews, add `aria-label` to form controls without visible text labels (like the main textarea), and use `aria-live` regions for dynamic content like chat messages.
