@@ -1,0 +1,3 @@
+## 2024-06-11 - Accessible Chat Inputs and Dynamic Tooltips
+**Learning:** Found a recurring pattern of missing `aria-label` attributes on form inputs (select and textarea) within the extension webview, reducing screen reader accessibility. Additionally, disabled states on buttons during async actions lacked contextual explanation (tooltips) and keyboard shortcut discoverability.
+**Action:** Always add `aria-label` to form inputs without explicit `<label>` tags. For interactive buttons that toggle disabled state during operations (like sending a message), dynamically update the `title` attribute to explain *why* it is disabled ("Waiting for agent response...") and restore the default tooltip (including keyboard shortcuts like "Enter") when re-enabled.
