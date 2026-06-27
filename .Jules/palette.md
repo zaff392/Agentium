@@ -1,0 +1,3 @@
+## 2024-05-18 - Adding Accessibility to Webview UI Form Controls
+**Learning:** Custom form controls in webviews, such as `<select>` and `<textarea>`, are completely invisible to screen readers without explicitly defined `aria-label` attributes. Furthermore, standard `:focus` styling often doesn't adequately highlight elements during keyboard navigation (tabbing), requiring explicit `:focus-visible` states to match existing hover or focus behaviors for true accessibility.
+**Action:** Always ensure that every custom form input inside webviews (and generally) is tagged with a descriptive `aria-label`, and always add `:focus-visible` styles with sufficient contrast (e.g., `outline: 2px solid var(--accent)`) to clearly identify focused states for keyboard users.
