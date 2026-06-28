@@ -1,0 +1,3 @@
+## 2026-06-28 - VS Code Webview Form Controls Accessibility
+**Learning:** Custom form controls in VS Code webviews (like select and textarea) lack visual labels by default and require explicit ARIA attributes for screen reader accessibility. Additionally, their focus states for keyboard navigation must be explicitly styled using `:focus-visible` to ensure they match hover states and are visible without relying on native browser outlines.
+**Action:** Always add descriptive `aria-label` attributes to unlabelled form controls in webviews and explicitly style `:focus-visible` states to match existing hover states for all interactive elements to guarantee seamless keyboard navigation and screen reader support.
