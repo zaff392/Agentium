@@ -1,0 +1,3 @@
+## 2026-07-06 - Webview Accessibility in VS Code Extensions
+**Learning:** Custom form controls (like `<select>` and `<textarea>`) within a VS Code webview lack visual labels and rely heavily on descriptive `aria-label`s for screen reader accessibility. Additionally, interactive elements without default outline styling need explicit `:focus-visible` styling to match hover states for reliable keyboard navigation.
+**Action:** Always add descriptive `aria-label`s to input fields in webviews, and map `:focus-visible` states to match existing hover states for all interactive elements to ensure full a11y compliance.
